@@ -79,7 +79,7 @@ find_package(G2O REQUIRED)
 include_directories(${G2O_INCLUDE_DIRS})
 link_directories(${G2O_LIBRARY_DIRS})
 link_libraries(${G2O_LIBRARIES})
-message("G2o-libraries "${G2O_LIBRARIES})
+message("G2o-libraries ${G2O_LIBRARIES}")
 
 # Qt ########################
 # http://qtnode.net/wiki/Qt4_with_cmake
