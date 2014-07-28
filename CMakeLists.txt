@@ -233,6 +233,9 @@ IF (${USE_GICP})
 ENDIF (${USE_GICP})
 #link libraries
 target_link_libraries(rgbdslam ${LIBS_LINK}  ${catkin_LIBRARIES})
+if(${USE_SIFT_GPU})
+    add_dependencies(rgbdslam siftgpu_proj)
+endif()
 
 IF (${USE_GICP})
   set(ROS_COMPILE_FLAGS ${ROS_COMPILE_FLAGS} -fpermissive)
