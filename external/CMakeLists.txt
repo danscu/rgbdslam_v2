@@ -12,6 +12,7 @@ ExternalProject_Add(siftgpu_proj
 
 add_library(siftgpu STATIC IMPORTED)
 set_property(TARGET siftgpu PROPERTY IMPORTED_LOCATION  ${CMAKE_CURRENT_SOURCE_DIR}/SiftGPU/bin/libsiftgpu.so)
+add_dependencies(siftgpu_proj siftgpu)
 
 #add_executable(myapp main.c)
 

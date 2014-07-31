@@ -25,6 +25,7 @@
 #include <cv.h>
 #include "scoped_timer.h"
 #include "header.h"
+#include<opencv2/imgproc/imgproc.hpp>
 
 #include "g2o/types/slam3d/se3quat.h"
 #include "g2o/types/slam3d/vertex_se3.h"
@@ -367,13 +368,13 @@ g2o::SE3Quat eigen2G2O(const Eigen::Matrix4d& eigen_mat)
 }
 using namespace cv;
 ///Analog to opencv example file and modified to use adjusters
-FeatureDetector* createDetector( const string& detectorType ) 
+FeatureDetector* createDetector( const std::string& detectorType ) 
 {
 	ParameterServer* params = ParameterServer::instance();
 	FeatureDetector* fd = 0;
     if( !detectorType.compare( "FAST" ) ) {
         //fd = new FastFeatureDetector( 20/*threshold*/, true/*nonmax_suppression*/ );
-        fd = new DynamicAdaptedFeatureDetector (new FastAdjuster(20,true), 
+        fd = new DynamicAdaptedFeatureDetector ( cv::Ptr<FastAdjuster>(new FastAdjuster(20,true) ), 
 												params->get<int>("min_keypoints"),
 												params->get<int>("max_keypoints"),
 												params->get<int>("adjuster_max_iterations"));
@@ -390,12 +391,13 @@ FeatureDetector* createDetector( const string& detectorType )
                  SIFT::DetectorParams::GET_DEFAULT_THRESHOLD(),
                  SIFT::DetectorParams::GET_DEFAULT_EDGE_THRESHOLD());
 #else
+
         fd = new SiftFeatureDetector();
 #endif
     }
     else if( !detectorType.compare( "SURF" ) || !detectorType.compare( "SURF128" ) ) {
       /* fd = new SurfFeatureDetector(200.0, 6, 5); */
-        fd = new DynamicAdaptedFeatureDetector(new SurfAdjuster(),
+        fd = new DynamicAdaptedFeatureDetector( cv::Ptr<cv::SurfAdjuster> ( new SurfAdjuster() ),
         										params->get<int>("min_keypoints"),
                             params->get<int>("max_keypoints")+300,
                             params->get<int>("adjuster_max_iterations"));
@@ -440,7 +442,7 @@ FeatureDetector* createDetector( const string& detectorType )
     return fd;
 }
 
-DescriptorExtractor* createDescriptorExtractor( const string& descriptorType ) 
+DescriptorExtractor* createDescriptorExtractor( const std::string& descriptorType ) 
 {
     DescriptorExtractor* extractor = 0;
     if( !descriptorType.compare( "SIFT" ) ) {

@@ -28,6 +28,8 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <Eigen/Core>
 //#include <image_geometry/pinhole_camera_model.h>
+#include<opencv2/imgproc/imgproc.hpp>
+
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/CameraInfo.h>
 /*

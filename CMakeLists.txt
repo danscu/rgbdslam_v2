@@ -31,6 +31,17 @@ ENDIF (${USE_GICP_BIN} OR ${USE_GICP_CODE})
 #########################################################
 #########################################################
 
+project(rgbdslam)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules/")
+#message(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
+
+#############################
+# OpenCV ####################
+#############################
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+link_directories(/usr/share/OpenCV/3rdparty/lib/)
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -38,12 +49,9 @@ ENDIF (${USE_GICP_BIN} OR ${USE_GICP_CODE})
 ####################################################
 # ROS
 ####################################################
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules/")
-#message(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
 find_package(catkin REQUIRED COMPONENTS pcl_conversions pcl_ros roscpp image_transport cv_bridge sensor_msgs 
              geometry_msgs visualization_msgs std_msgs tf message_generation message_filters rosbag rosconsole)
 
-project(rgbdslam)
 
 #add_definitions(-DROSCONSOLE_SEVERITY_INFO)
 
@@ -79,7 +87,7 @@ find_package(G2O REQUIRED)
 include_directories(${G2O_INCLUDE_DIRS})
 link_directories(${G2O_LIBRARY_DIRS})
 link_libraries(${G2O_LIBRARIES})
-message("G2o-libraries ${G2O_LIBRARIES}")
+message("G2o-libraries "${G2O_LIBRARIES})
 
 # Qt ########################
 # http://qtnode.net/wiki/Qt4_with_cmake
@@ -166,14 +174,7 @@ ENDIF (${USE_PCL_ICP})
 
 
 
-#############################
-# OpenCV ####################
-#############################
-find_package(OpenCV)
-include_directories(${OpenCV_INCLUDE_DIRS})
-link_directories(${OpenCV_LIBRARY_DIRS})
-
-#############################
+############################
 # Eigen ####################
 #############################
 find_package(Eigen)
@@ -219,7 +220,7 @@ add_dependencies(rgbdslam rgbdslam_gencpp)
 #SET(G2O_LIBS ${G2O_LIBRARIES} cholmod cxsparse)
 #SET(LIBS_LINK GL GLU -lgl2ps ${G2O_LIBS} ${QT_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS})
 #Use specific version of cxsparse, to avoid linker warning about possible conflicts between versions 2.2.3 (linked from g2o) and 3.1.0
-SET(LIBS_LINK GL GLU cholmod /usr/lib/libcxsparse.so.2.2.3 ${G2O_LIBRARIES} ${QT_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS})
+SET(LIBS_LINK GL GLU cholmod /usr/lib/x86_64-linux-gnu/libcxsparse.so.3.1.2 ${G2O_LIBRARIES} ${QT_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS})
 #-lboost_signals -lrt -loctomap -loctomap_server -loctomath)
 
 IF (${USE_SIFT_GPU})
@@ -233,9 +234,6 @@ IF (${USE_GICP})
 ENDIF (${USE_GICP})
 #link libraries
 target_link_libraries(rgbdslam ${LIBS_LINK}  ${catkin_LIBRARIES})
-if(${USE_SIFT_GPU})
-    add_dependencies(rgbdslam siftgpu_proj)
-endif()
 
 IF (${USE_GICP})
   set(ROS_COMPILE_FLAGS ${ROS_COMPILE_FLAGS} -fpermissive)

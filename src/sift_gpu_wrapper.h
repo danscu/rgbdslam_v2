@@ -23,6 +23,7 @@
 #include <opencv/cv.h>
 #include <SiftGPU/SiftGPU.h>
 #include <QMutex>
+#include <opencv2/core/core.hpp>
 
 /*!
  * \brief Interface for SiftGPU
@@ -46,7 +47,7 @@ public:
 	 * \param  mask         a mask (see OpenCV)
 	 * \return a pointer to the descriptor values
 	 */
-	void detect(const cv::Mat& image, cv::vector<cv::KeyPoint>& keypoints, std::vector<float>& descriptors, const cv::Mat& mask = cv::Mat()) const;
+	void detect(const cv::Mat& image, std::vector<cv::KeyPoint>& keypoints, std::vector<float>& descriptors, const cv::Mat& mask = cv::Mat()) const;
 
 	/*!
 	 * Is used for matching two descriptors

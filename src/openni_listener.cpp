@@ -138,8 +138,8 @@ OpenNIListener::OpenNIListener(GraphManager* graph_mgr)
       ROS_INFO_STREAM("Listening to " << widev_tpc << " and " << widec_tpc );
     } 
   } 
-  detector_ = createDetector(ps->get<std::string>("feature_detector_type"));
-  extractor_ = createDescriptorExtractor(ps->get<std::string>("feature_extractor_type"));
+  detector_ = cv::Ptr<cv::FeatureDetector>( createDetector(ps->get<std::string>("feature_detector_type")) );
+  extractor_ = cv::Ptr<cv::DescriptorExtractor>( createDescriptorExtractor(ps->get<std::string>("feature_extractor_type")) );
 }
 
  
@@ -266,6 +266,9 @@ void OpenNIListener::loadBag(std::string filename)
       if (m.getTopic() == tf_tpc|| ("/" + m.getTopic() == tf_tpc)){
         tf::tfMessage::ConstPtr tf_msg = m.instantiate<tf::tfMessage>();
         if (tf_msg) {
+#if ROS_VERSION_MINIMUM(1,11,0)
+	//use MessageEvent for indigo
+#else
           //if(tf_msg->transforms[0].header.frame_id == "/kinect") continue;//avoid destroying tf tree if odom is used
           //prevents missing callerid warning
           boost::shared_ptr<std::map<std::string, std::string> > msg_header_map = tf_msg->__connection_header;
@@ -274,7 +277,8 @@ void OpenNIListener::loadBag(std::string filename)
           ROS_DEBUG("Found Message of %s", tf_tpc.c_str());
           last_tf = tf_msg->transforms[0].header.stamp;
           last_tf -= ros::Duration(1.0);
-        }
+#endif
+	}
       }
       while(!vis_images.empty() && vis_images.front()->header.stamp < last_tf){
           rgb_img_sub_->newMessage(vis_images.front());
