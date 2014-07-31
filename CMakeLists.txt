@@ -38,7 +38,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake-mo
 #############################
 # OpenCV ####################
 #############################
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 3.0 REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 link_directories(/usr/share/OpenCV/3rdparty/lib/)
 
