@@ -235,6 +235,10 @@ ENDIF (${USE_GICP})
 #link libraries
 target_link_libraries(rgbdslam ${LIBS_LINK}  ${catkin_LIBRARIES})
 
+if(${USE_SIFT_GPU})
+	add_dependecies(rgbdslam siftgpu_proj)
+endif()
+
 IF (${USE_GICP})
   set(ROS_COMPILE_FLAGS ${ROS_COMPILE_FLAGS} -fpermissive)
   add_library(gicp external/gicp/bfgs_funcs.cpp external/gicp/gicp.cpp external/gicp/optimize.cpp external/gicp/scan.cpp external/gicp/transform.cpp)
