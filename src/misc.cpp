@@ -384,7 +384,7 @@ FeatureDetector* createDetector( const std::string& detectorType )
                                       8/*line_threshold_binarized*/, 5/*suppress_nonmax_size*/ );
     }
     else if( !detectorType.compare( "SIFT" ) ) {
-#if CV_MAJOR_VERSION > 2 || CV_MINOR_VERSION <= 3
+#if CV_MAJOR_VERSION == 2 && CV_MINOR_VERSION <= 3
         fd = new SiftFeatureDetector(SIFT::DetectorParams::GET_DEFAULT_THRESHOLD(),
                                      SIFT::DetectorParams::GET_DEFAULT_EDGE_THRESHOLD());
         ROS_INFO("Default SIFT threshold: %f, Default SIFT Edge Threshold: %f", 
@@ -420,10 +420,10 @@ FeatureDetector* createDetector( const std::string& detectorType )
         fd = fd->create("BRISK");
     }
     else if( !detectorType.compare( "ORB" ) ) {
-#if CV_MAJOR_VERSION > 2 || CV_MINOR_VERSION == 3
+#if CV_MAJOR_VERSION == 2 && CV_MINOR_VERSION == 3
         fd = new OrbFeatureDetector(params->get<int>("max_keypoints")+1500,
                 ORB::CommonParams(1.2, ORB::CommonParams::DEFAULT_N_LEVELS, 31, ORB::CommonParams::DEFAULT_FIRST_LEVEL));
-#elif CV_MAJOR_VERSION > 2 || CV_MINOR_VERSION >= 4
+#elif CV_MAJOR_VERSION >= 2 && CV_MINOR_VERSION >= 4
         fd = new OrbFeatureDetector();
 #else
       ROS_ERROR("ORB features are not implemented in your version of OpenCV");
