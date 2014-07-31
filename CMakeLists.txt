@@ -236,7 +236,7 @@ ENDIF (${USE_GICP})
 target_link_libraries(rgbdslam ${LIBS_LINK}  ${catkin_LIBRARIES})
 
 if(${USE_SIFT_GPU})
-	add_dependecies(rgbdslam siftgpu_proj)
+	add_dependencies(rgbdslam siftgpu_proj)
 endif()
 
 IF (${USE_GICP})
